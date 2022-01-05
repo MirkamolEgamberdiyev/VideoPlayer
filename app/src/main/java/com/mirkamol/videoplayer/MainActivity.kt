@@ -6,11 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.VideoView
 import com.khizar1556.mkvideoplayer.MKPlayer
 import com.khizar1556.mkvideoplayer.MKPlayerActivity
 import net.alhazmy13.mediapicker.Video.VideoPicker
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var videoPlayer: VideoView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         val playVideo = findViewById<Button>(R.id.btn_play_video)
 
+        videoPlayer = findViewById<VideoView>(R.id.vv_video_player)
         playVideo.setOnClickListener {
             pickVideo()
         }
@@ -46,7 +51,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             val videoPaths = data!!.getStringArrayListExtra(VideoPicker.EXTRA_VIDEO_PATH)
 
-            MKPlayerActivity.configPlayer(this@MainActivity).play(videoPaths?.get(0).toString())
+//            MKPlayerActivity.configPlayer(this@MainActivity).play(videoPaths?.get(0).toString())
+            val uri = Uri.parse(videoPaths?.get(0))
+            videoPlayer.setVideoURI(uri)
+            videoPlayer.start()
         }
     }
 
